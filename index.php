@@ -1,21 +1,28 @@
 <?php
+// index.php
 
-require_once 'config/database.php';
-require_once 'model/FormModel.php';
-require_once 'controller/FormController.php';
+// require_once 'config/database.php';
+require_once 'model/ReportModel.php';
+require_once 'controller/ReportController.php';
 
-//Setup database
+$config = require 'config/database.php';
+
 $pdo = new PDO("mysql:host={$config['host']};dbname={$config['dbname']}", $config['username'], $config['password']);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$model = new OrderModel($pdo);
-$controller = new OrderController($model);
+$model = new ReportModel($pdo);
+$controller = new ReportController($model);
 
-// Check if the form is submitted
-$controller->storeOrderDetails();
+// Retrieve the action from the request body
+$action = isset($_POST['action']) ? $_POST['action'] : 'showReportList';
 
-// Display order creation page
-include 'view/create_order.php';
-
-// Display order list
-$controller->showOrderList();
+switch ($action) {
+    case 'store-report':
+        $controller->storeReportDetails();
+        break;
+    case 'showFormData':
+        $controller->showReportList();
+        break;
+    default:
+        $controller->showReportList();
+}

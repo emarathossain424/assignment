@@ -1,6 +1,6 @@
 <?php
 
-class OrderModel
+class ReportModel
 {
     private $pdo;
 
@@ -11,7 +11,7 @@ class OrderModel
 
     public function storeData($data)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO form_data (name, email) VALUES (:name, :email)");
+        $stmt = $this->pdo->prepare("INSERT INTO report (name, email) VALUES (:name, :email)");
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':email', $data['email']);
         
@@ -20,7 +20,7 @@ class OrderModel
 
     public function getAllData()
     {
-        $stmt = $this->pdo->query("SELECT * FROM form_data");
+        $stmt = $this->pdo->query("SELECT * FROM report");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
