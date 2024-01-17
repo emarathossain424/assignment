@@ -52,7 +52,11 @@
                     <input type="number" class="form-control" id="receipt_id" name="receipt_id">
 
                     <label for="amount" class="form-label mt-2">Amount:</label>
-                    <input type="number" class="form-control" id="amount" name="amount">
+                    <input type="text" class="form-control" id="amount" name="amount">
+                    <div class="invalid-feedback">
+                        Please enter a valid amount.
+                    </div>
+
 
                     <label for="entry_by" class="form-label mt-2">Entry By:</label>
                     <input type="number" class="form-control" id="entry_by" name="entry_by">
@@ -68,9 +72,14 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
+
+            $('#amount').on('keyup', () => {
+                validateNumber('#amount')
+            })
+
             $('#create_report').submit(function(e) {
                 e.preventDefault();
 
@@ -89,6 +98,16 @@
                     }
                 });
             });
+
+            function validateNumber(element_id) {
+                var numberInput = $(element_id).val();
+                var numberPattern = /^-?\d*\.?\d+$/;
+                if (numberPattern.test(numberInput)) {
+                    $(element_id).removeClass('is-invalid')
+                } else {
+                    $(element_id).addClass('is-invalid')
+                }
+            }
         });
     </script>
 </body>
