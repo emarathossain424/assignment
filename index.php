@@ -12,18 +12,23 @@ $pdo = new PDO("mysql:host={$config['host']};dbname={$config['dbname']}", $confi
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $model = new ReportModel($pdo);
-$controller = new ReportController($model,$settings);
+$controller = new ReportController($model, $settings);
 
 // Retrieve the action from the request body
-$action = isset($_POST['action']) ? $_POST['action'] : 'showReportList';
+$action = isset($_GET['url']) ? $_GET['url'] : 'store-report';
 
 switch ($action) {
+    case 'create-report':
+        $controller->showFormPage();
+        break;
     case 'store-report':
         $controller->storeReportDetails();
         break;
-    case 'showFormData':
+    case 'show-report':
         $controller->showReportList();
         break;
     default:
-        $controller->showReportList();
+        header("HTTP/1.0 404 Not Found");
+        echo '404 Not Found';
+        break;
 }

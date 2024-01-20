@@ -9,6 +9,13 @@ class ReportController
         $this->settings = $settings;
     }
 
+    /**
+     * Will rediret to report creation page
+     */
+    public function showFormPage()
+    {
+        include 'view/create_report.php';
+    }
 
     /**
      * Will store report details
@@ -74,7 +81,18 @@ class ReportController
      */
     public function showReportList()
     {
-        $reports = $this->model->getAllData();
+        $entry_at = isset($_GET['entry_at']) ? $_GET['entry_at'] : '';
+        $entry_by = isset($_GET['entry_by']) ? $_GET['entry_by'] : '';
+
+        $current_page_number = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page from the URL, default to 1
+        $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 5; // Replace with your desired number of reports per page
+        
+        $reports = $this->model->getAllData($entry_at,$entry_by,$per_page,$current_page_number);
+        $total_report = $this->model->totalReport();
+        $total_pages = ceil($total_report / $per_page);
+
+        $all_entry_by = $this->model->getAllEntryById();
+        
         include 'view/report_list.php';
     }
 
@@ -208,8 +226,6 @@ class ReportController
 
         return $hash_key;
     }
-
-
 
     /**
      *  Will return entry date by already set up timezone 

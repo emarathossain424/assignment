@@ -122,6 +122,8 @@
 
     <script>
         $(document).ready(function() {
+            console.log(document.cookie)
+
             let item = 1
 
             validateItem(item)
@@ -279,40 +281,51 @@
 
                 //Submit form after successful client side validation
                 if (!is_any_item_empty) {
-                    let data = $(this).serialize();
 
-                    $.ajax({
-                        type: 'POST',
-                        url: '/assignment/index.php',
-                        data: data + '&action=store-report',
-                        success: function(response) {
-                            if (response.success) {
-                                $('.error').css('display', 'none')
-                                Swal.fire({
-                                    title: 'Success',
-                                    text: 'Data stored in database successfully!',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = '/assignment/view/report_list.php'; // Replace with your desired URL
-                                    }
-                                });
+                    let all_cookies = document.cookie
 
-                            } else {
-                                if (response.hasOwnProperty('errors')) {
-                                    let errors = response.errors
-                                    for (let key in errors) {
-                                        $('#' + key + '_error').text(errors[key])
-                                        $('#' + key + '_error').css('display', 'block')
+                    if (!all_cookies.includes('isFormSubmetted=true')) {
+                        let data = $(this).serialize();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/assignment/index.php',
+                            data: data + '&action=store-report',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Success',
+                                        text: 'Data stored in database successfully!',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.cookie = `isFormSubmetted=true; max-Age=60`
+                                            window.location.href = '/assignment/view/report_list.php'; // Replace with your desired URL
+                                        }
+                                    });
+                                } else {
+                                    if (response.hasOwnProperty('errors')) {
+                                        let errors = response.errors
+                                        for (let key in errors) {
+                                            $('#' + key + '_error').text(errors[key])
+                                            $('#' + key + '_error').css('display', 'block')
+                                        }
                                     }
                                 }
+                            },
+                            error: function(error) {
+                                console.log(error.responseText);
                             }
-                        },
-                        error: function(error) {
-                            console.log(error.responseText);
-                        }
-                    });
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Warning',
+                            text: 'You cannot submit again within 24 hours. Please clear cookies and try again',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+                    }
                 }
             });
         });
