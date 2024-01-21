@@ -1,7 +1,5 @@
 <?php
-// index.php
 
-// require_once 'config/database.php';
 require_once 'model/ReportModel.php';
 require_once 'controller/ReportController.php';
 
@@ -14,7 +12,6 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $model = new ReportModel($pdo);
 $controller = new ReportController($model, $settings);
 
-// Retrieve the action from the request body
 $action = isset($_GET['url']) ? $_GET['url'] : 'store-report';
 
 switch ($action) {

@@ -66,10 +66,10 @@ class ReportController
                 echo json_encode(['success' => false, 'message' => 'Get method is not allowed']);
             }
         } catch (PDOException $e) {
-            // Handle PDOException
+            //Handle database related exceptions
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-            // You might log the exception, redirect the user, or perform other error handling tasks.
         } catch (Exception $ex) {
+             //Handle general exceptions
             echo json_encode(['success' => false, 'message' => $ex->getMessage()]);
         }
     }
@@ -81,19 +81,27 @@ class ReportController
      */
     public function showReportList()
     {
-        $entry_at = isset($_GET['entry_at']) ? $_GET['entry_at'] : '';
-        $entry_by = isset($_GET['entry_by']) ? $_GET['entry_by'] : '';
+        try {
+            $entry_at = isset($_GET['entry_at']) ? $_GET['entry_at'] : '';
+            $entry_by = isset($_GET['entry_by']) ? $_GET['entry_by'] : '';
 
-        $current_page_number = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page from the URL, default to 1
-        $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 5; // Replace with your desired number of reports per page
-        
-        $reports = $this->model->getAllData($entry_at,$entry_by,$per_page,$current_page_number);
-        $total_report = $this->model->totalReport();
-        $total_pages = ceil($total_report / $per_page);
+            $current_page_number = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page from the URL, default to 1
+            $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 5; // Replace with your desired number of reports per page
 
-        $all_entry_by = $this->model->getAllEntryById();
-        
-        include 'view/report_list.php';
+            $reports = $this->model->getAllData($entry_at, $entry_by, $per_page, $current_page_number);
+            $total_report = $this->model->totalReport();
+            $total_pages = ceil($total_report / $per_page);
+
+            $all_entry_by = $this->model->getAllEntryById();
+
+            include 'view/report_list.php';
+        } catch (PDOException $e) {
+            //Handle database related exceptions
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } catch (Exception $ex) {
+            //Handle general exceptions
+            echo json_encode(['success' => false, 'message' => $ex->getMessage()]);
+        }
     }
 
 

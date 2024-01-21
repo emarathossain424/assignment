@@ -9,6 +9,9 @@ class ReportModel
         $this->pdo = $pdo;
     }
 
+    /**
+     * Will store form data
+     */
     public function storeData($data)
     {
         $stmt = $this->pdo->prepare("INSERT INTO report (amount, buyer,receipt_id,items,buyer_email,buyer_ip,note,city,phone,hash_key,entry_at,entry_by) VALUES (:amount, :buyer,:receipt_id,:items,:email,:buyer_ip,:note,:city,:phone,:hash_key,:entry_at,:entry_by)");
@@ -30,11 +33,14 @@ class ReportModel
         return $stmt->execute();
     }
 
+    /** 
+     * Will fetch all data after filtering with necessary conditions
+     */
     public function getAllData($entry_at, $entry_by, $per_page, $current_page_number)
     {
         $entry_start_date = '';
         $entry_end_date = '';
-        $pagination_start = ($current_page_number-1)*$per_page;
+        $pagination_start = ($current_page_number - 1) * $per_page;
 
         if (!empty($entry_at)) {
             $exploded_date = explode('~', $entry_at);
@@ -52,7 +58,7 @@ class ReportModel
             $query_string = $query_string . " WHERE entry_by = :entry_by";
         }
 
-        $query_string =$query_string. " LIMIT :start, :limit";
+        $query_string = $query_string . " LIMIT :start, :limit";
 
 
         $stmt = $this->pdo->prepare($query_string);
@@ -75,6 +81,9 @@ class ReportModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Will return total number of report
+     */
     public function totalReport()
     {
         $query = "SELECT COUNT(*) as total FROM report";
@@ -85,7 +94,11 @@ class ReportModel
         return $result['total'];
     }
 
-    public function getAllEntryById(){
+    /**
+     * Will return the list of all entry by id 
+     */
+    public function getAllEntryById()
+    {
         $query = "SELECT DISTINCT(entry_by) FROM report";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();

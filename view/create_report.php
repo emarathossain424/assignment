@@ -14,27 +14,30 @@
 </head>
 
 <body>
+    <!-- Header -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/assignment/view/report_list.php">Assignment</a>
+                <a class="navbar-brand" href="/assignment/show-report">Assignment</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/assignment/view/report_list.php">Report List</a>
+                            <a class="nav-link" aria-current="page" href="/assignment/show-report">Report List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="/assignment/view/create_report.php">Create Report</a>
+                            <a class="nav-link active" href="/assignment/create-report">Create Report</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <!-- /Header -->
 
+    <!-- Report form -->
     <div class="d-flex h-100 justify-content-center align-items-center m-3">
         <div class="container">
             <h2 class="text-center mb-4">Create Report</h2>
@@ -114,6 +117,7 @@
             </form>
         </div>
     </div>
+    <!-- Report form-->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -214,7 +218,8 @@
                     },
                     amount: {
                         required: true,
-                        number: true
+                        number: true,
+                        regex: /^[0-9]+$/
                     },
                     entry_by: {
                         required: true,
@@ -230,7 +235,7 @@
                     buyer: {
                         required: "Please enter a valid buyer name.",
                         maxlength: "Please enter no more than 20 characters.",
-                        regex: "Please follow these constraints (only text, spaces, and numbers).",
+                        regex: "Invalid charecters",
                         xssCheck: "Hey attacker stay away from us !!!!."
                     },
                     email: {
@@ -243,17 +248,18 @@
                     },
                     city: {
                         required: "Please enter a valid city name.",
-                        regex: "Please follow these constraints (only text and spaces).",
+                        regex: "Invalid charecters",
                         xssCheck: "Hey attacker stay away from us !!!!."
                     },
                     receipt_id: {
                         required: "Please enter a valid receipt id.",
-                        regex: "Please follow these constraints (only text).",
+                        regex: "Invalid charecters",
                         xssCheck: "Hey attacker stay away from us !!!!."
                     },
                     amount: {
                         required: "Please enter a valid amount.",
-                        number: "Please enter a valid number."
+                        number: "Please enter a valid number.",
+                        regex: "Invalid charecters",
                     },
                     entry_by: {
                         required: "Please enter the entry by name."
@@ -301,7 +307,7 @@
                                     }).then((result) => {
                                         if (result.isConfirmed) {
                                             document.cookie = `isFormSubmetted=true; max-Age=60`
-                                            window.location.href = '/assignment/view/report_list.php'; // Replace with your desired URL
+                                            window.location.href = '/assignment/show-report'; // Replace with your desired URL
                                         }
                                     });
                                 } else {

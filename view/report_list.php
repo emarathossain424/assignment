@@ -10,34 +10,37 @@
 </head>
 
 <body>
+    <!-- Header -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/assignment/view/report_list.php">Assignment</a>
+                <a class="navbar-brand" href="/assignment/show-report">Assignment</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/assignment/view/report_list.php">Report List</a>
+                            <a class="nav-link active" aria-current="page" href="/assignment/show-report">Report List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/assignment/view/create_report.php">Create Report</a>
+                            <a class="nav-link" href="/assignment/create-report">Create Report</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <!-- /Header -->
 
     <div class="d-flex h-100 justify-content-center align-items-center m-3">
         <div class="container">
             <h2 class="text-center mb-4">All Reports</h2>
 
+            <!-- report filtering options -->
             <div class="row mb-4">
                 <div class="col-md-2">
-                    <select id="per-page" class="form-select mt-2">
+                    <select id="per-page" class="form-select mt-2" onchange="filterAndPaginateList(1)">
                         <option value="5" <?php echo $per_page == 5 ? 'selected' : '' ?>>5</option>
                         <option value="10" <?php echo $per_page == 10 ? 'selected' : '' ?>>10</option>
                         <option value="25" <?php echo $per_page == 25 ? 'selected' : '' ?>>25</option>
@@ -61,6 +64,9 @@
                     <button class="btn btn-danger mt-2" id="filterBtn" onclick="clearFilter()">Clear Filter</button>
                 </div>
             </div>
+            <!-- report filtering options -->
+
+            <!-- All reports -->
             <div class="table-responsive">
                 <?php if (sizeof($reports) > 0) { ?>
                     <table class="table table-striped table-bordered">
@@ -105,7 +111,7 @@
             </div>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item <?= ($current_page_number == 1) ? 'disabled' : ''; ?>">
+                    <li class="page-item <?php ($current_page_number == 1) ? 'disabled' : ''; ?>">
                         <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $current_page_number - 1; ?>')" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
@@ -113,12 +119,12 @@
                     </li>
 
                     <?php for ($i = max(1, $current_page_number - 2); $i <= min($total_pages, $current_page_number + 2); $i++) : ?>
-                        <li class="page-item <?= ($i == $current_page_number) ? 'active' : ''; ?>">
-                            <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $i; ?>')"><?= $i;  ?></a>
+                        <li class="page-item <?php ($i == $current_page_number) ? 'active' : ''; ?>">
+                            <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $i; ?>')"><?php $i;  ?></a>
                         </li>
                     <?php endfor; ?>
 
-                    <li class="page-item <?= ($current_page_number == $total_pages) ? 'disabled' : ''; ?>">
+                    <li class="page-item <?php ($current_page_number == $total_pages) ? 'disabled' : ''; ?>">
                         <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $current_page_number + 1; ?>')" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
@@ -126,6 +132,7 @@
                     </li>
                 </ul>
             </nav>
+            <!-- /All reports -->
         </div>
     </div>
 
@@ -135,6 +142,7 @@
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.js"></script>
     <script>
         $(document).ready(function() {
+            //initializing date range picker
             $('input[id="daterange"]').daterangepicker({
                 autoUpdateInput: false,
             }, function(start, end, label) {
@@ -142,6 +150,7 @@
             });
         })
 
+        //Report list filtering and pagination
         function filterAndPaginateList(page) {
             let entry_at = $('#daterange').val()
             let entry_by = $('#entryBy').val()
@@ -162,6 +171,7 @@
             window.location.href = url;
         }
 
+        //clear filter
         function clearFilter() {
             window.location.href = '/assignment/show-report';
         }
