@@ -109,29 +109,31 @@
                     <p>No data found</p>
                 <?php } ?>
             </div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item <?php ($current_page_number == 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $current_page_number - 1; ?>')" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-
-                    <?php for ($i = max(1, $current_page_number - 2); $i <= min($total_pages, $current_page_number + 2); $i++) : ?>
-                        <li class="page-item <?php ($i == $current_page_number) ? 'active' : ''; ?>">
-                            <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $i; ?>')"><?php $i;  ?></a>
+            <?php if (sizeof($reports) > 0) { ?>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item <?php echo ($current_page_number == 1) ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $current_page_number - 1; ?>')" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
                         </li>
-                    <?php endfor; ?>
 
-                    <li class="page-item <?php ($current_page_number == $total_pages) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $current_page_number + 1; ?>')" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        <?php for ($i = max(1, $current_page_number - 2); $i <= min($total_pages, $current_page_number + 2); $i++) : ?>
+                            <li class="page-item <?php echo ($i == $current_page_number) ? 'active' : ''; ?>">
+                                <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $i; ?>')"><?php echo $i;  ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <li class="page-item <?php echo ($current_page_number == $total_pages) ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="#" onclick="filterAndPaginateList('<?php echo $current_page_number + 1; ?>')" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            <?php } ?>
             <!-- /All reports -->
         </div>
     </div>

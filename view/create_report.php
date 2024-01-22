@@ -126,8 +126,6 @@
 
     <script>
         $(document).ready(function() {
-            console.log(document.cookie)
-
             let item = 1
 
             validateItem(item)
@@ -272,6 +270,7 @@
                 }
             });
 
+            //Submit report form
             $('#create-report').submit(function(e) {
                 e.preventDefault();
 
@@ -288,6 +287,11 @@
                 //Submit form after successful client side validation
                 if (!is_any_item_empty) {
 
+                    // Chcking if any item is empty
+                    $('.error').each(function() {
+                        $(this).text('');
+                    });
+
                     let all_cookies = document.cookie
 
                     if (!all_cookies.includes('isFormSubmetted=true')) {
@@ -295,7 +299,7 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '/assignment/index.php',
+                            url: '/assignment/store-report',
                             data: data + '&action=store-report',
                             success: function(response) {
                                 if (response.success) {
@@ -306,7 +310,7 @@
                                         confirmButtonText: 'OK',
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            document.cookie = `isFormSubmetted=true; max-Age=60`
+                                            document.cookie = `isFormSubmetted=true; max-Age=86400`
                                             window.location.href = '/assignment/show-report'; // Replace with your desired URL
                                         }
                                     });
@@ -348,8 +352,11 @@
          */
         function validateItem(item_number) {
             let item_name = $('#item-' + item_number).val()
-            let text_only_regx = /^[a-zA-Z]+$/
+            let text_only_regx = /^[a-zA-Z\s]+$/
             let regx_for_xss_prevent = /[<>"'&]/g
+
+            console.log(text_only_regx.test(item_name))
+            console.log(regx_for_xss_prevent.test(item_name))
 
             if (text_only_regx.test(item_name) && !regx_for_xss_prevent.test(item_name)) {
                 $('#item_' + item_number + '_error').text('')

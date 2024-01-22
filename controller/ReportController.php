@@ -69,7 +69,7 @@ class ReportController
             //Handle database related exceptions
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } catch (Exception $ex) {
-             //Handle general exceptions
+            //Handle general exceptions
             echo json_encode(['success' => false, 'message' => $ex->getMessage()]);
         }
     }
@@ -129,10 +129,10 @@ class ReportController
             'phone' => ['required' => true, 'number' => true],
             'city' => ['required' => true, 'regex' => '/^[a-zA-Z\s]+$/', 'xssCheck' => true],
             'receipt_id' => ['required' => true, 'regex' => '/^[a-zA-Z]+$/', 'xssCheck' => true],
-            'amount' => ['required' => true, 'number' => true],
+            'amount' => ['required' => true, 'number' => true, 'regex' => '/^[0-9]+$/'],
             'entry_by' => ['required' => true, 'number' => true],
             'note' => ['required' => true, 'wordCount' => 30, 'xssCheck' => true],
-            'items' => ['required' => true, 'regex' => '/^[a-zA-Z]+$/', 'xssCheck' => true]
+            'items' => ['required' => true, 'regex' => '/^[a-zA-Z\s]+$/', 'xssCheck' => true]
         ];
 
         foreach ($validationRules as $field => $rules) {
